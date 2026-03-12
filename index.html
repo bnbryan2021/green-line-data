@@ -42,7 +42,7 @@
         .header .subtitle { color: #7c7ff0; font-size: 1.1em; margin-top: 8px; font-weight: bold;}
         .header .date-range { color: #a0aec0; font-size: 0.9em; margin-top: 5px; }
 
-        /* 🚀 頁籤按鈕專區設計 */
+        /* 🚀 頁籤按鈕專區設計 (已完成紅色與綠色互換) */
         .tabs-container {
             display: flex;
             justify-content: center;
@@ -50,10 +50,11 @@
             margin-bottom: 25px;
         }
 
+        /* 1. Non-active 按鈕：現在是紅色 (交換自截圖綠色位置) */
         .tab-btn {
             background: rgba(255, 255, 255, 0.9);
-            color: #7c7ff0;
-            border: 2px solid #7c7ff0;
+            color: #e53e3e; /* 👈 紅色文字 */
+            border: 2px solid #e53e3e; /* 👈 紅色邊框 */
             padding: 12px 30px;
             font-size: 1.15em;
             font-family: 'Microsoft JhengHei', sans-serif;
@@ -66,13 +67,17 @@
 
         .tab-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(124, 127, 240, 0.4);
+            /* 懸停時的紅色發光 */
+            box-shadow: 0 6px 20px rgba(229, 62, 62, 0.4); 
         }
 
+        /* 2. Active 按鈕：現在是綠色背景 (交換自截圖紅色位置) */
         .tab-btn.active {
-            background: #7c7ff0;
-            color: white;
-            box-shadow: 0 6px 20px rgba(124, 127, 240, 0.5);
+            background: #48bb78; /* 👈 綠色背景 */
+            color: white; /* 👈 白色文字維持 */
+            border-color: #48bb78; /* 👈 邊框也變綠色 */
+            /* 綠色發光效果 */
+            box-shadow: 0 6px 20px rgba(72, 187, 120, 0.5); 
         }
 
         .tab-content {
