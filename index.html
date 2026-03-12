@@ -1,685 +1,413 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
-   <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-PRFXEHZC8J"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-PRFXEHZC8J');
-</script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>三星綠線門災情分析報告</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.4.3/echarts.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <title>三星綠線門災情分析與真相報告</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <style>
-        :root {
-            --neon-cyan:   #00f5ff;
-            --neon-pink:   #ff00aa;
-            --neon-green:  #39ff14;
-            --neon-orange: #ff6600;
-            --neon-purple: #bf00ff;
-            --neon-yellow: #ffe600;
-            --neon-red:    #ff2255;
-            --neon-blue:   #0088ff;
-            --card-bg:     rgba(10,14,30,0.92);
-            --card-border: rgba(0,245,255,0.25);
-        }
-        * { margin:0; padding:0; box-sizing:border-box; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
+        /* 全局明亮主題基底 (來自你的 1️⃣ 檔案) */
         body {
-            font-family: 'Noto Sans TC', sans-serif;
-            background: #000;
-            color: #e0e8ff;
-            padding: 28px 20px;
+            font-family: 'Microsoft JhengHei', 'Segoe UI', Arial, sans-serif;
+            background: linear-gradient(135deg, #7c7ff0 0%, #9b7ff5 100%);
+            padding: 25px 20px;
             min-height: 100vh;
+            color: #333;
         }
+
         .container { max-width: 1200px; margin: 0 auto; }
 
-        /* HEADER */
+        /* 頭部設計 */
         .header {
-            background: var(--card-bg);
-            border: 1px solid var(--neon-cyan);
-            border-radius: 16px;
-            padding: 32px 40px;
-            margin-bottom: 18px;
+            background: white;
+            border-radius: 20px;
+            padding: 35px 40px;
+            margin-bottom: 25px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.15);
             text-align: center;
-            box-shadow: 0 0 30px rgba(0,245,255,0.15), inset 0 0 40px rgba(0,245,255,0.03);
-            position: relative;
         }
-        .header::before {
-            content:'';
-            position:absolute; inset:0; border-radius:16px;
-            background:linear-gradient(135deg,rgba(0,245,255,0.05) 0%,transparent 60%);
-            pointer-events:none;
-        }
+
         .header h1 {
-            font-family:'Orbitron',sans-serif;
-            font-size:2em; font-weight:700;
-            color:#fff;
-            text-shadow:0 0 10px var(--neon-cyan),0 0 30px rgba(0,245,255,0.6);
-            letter-spacing:3px; margin-bottom:10px;
-        }
-        .header .subtitle { color:var(--neon-cyan); font-size:.95em; opacity:.85; }
-        .header .date-range { color:rgba(180,200,255,.55); font-size:.85em; margin-top:5px; }
-
-        /* STAT CARDS */
-        .stats-grid {
-            display:grid; grid-template-columns:repeat(4,1fr);
-            gap:16px; margin-bottom:18px;
-        }
-        .stat-card {
-            background:var(--card-bg);
-            border-radius:14px; padding:24px 16px;
-            text-align:center;
-            border:1px solid rgba(255,255,255,0.08);
-            position:relative; overflow:hidden;
-            cursor: default;
-        }
-        .stat-card::after {
-            content:''; position:absolute;
-            bottom:0; left:0; right:0; height:2px;
-        }
-        .stat-card.total::after      { background:var(--neon-red);    box-shadow:0 0 8px var(--neon-red); }
-        .stat-card.greenline::after  { background:var(--neon-green);  box-shadow:0 0 8px var(--neon-green); }
-        .stat-card.detachment::after { background:var(--neon-pink);   box-shadow:0 0 8px var(--neon-pink); }
-        .stat-card.repair::after     { background:var(--neon-cyan);   box-shadow:0 0 8px var(--neon-cyan); }
-        
-        /* Hover 效果 */
-        .stat-card .label { 
-            font-size:.92em; color:rgba(180,200,255,.7); margin-bottom:10px; letter-spacing:1px; 
-            transition: color 0.3s ease, text-shadow 0.3s ease;
-        }
-        .stat-card .desc { 
-            font-size:.8em; color:rgba(180,200,255,.5); 
-            transition: color 0.3s ease, text-shadow 0.3s ease;
-        }
-        .stat-card:hover .label, .stat-card:hover .desc {
-            color: #ffffff;
-            text-shadow: 0 0 8px rgba(255,255,255,0.6);
+            font-size: 2.3em;
+            color: #2d3748;
+            margin-bottom: 12px;
+            border-left: 5px solid #7c7ff0;
+            padding-left: 20px;
+            display: inline-block;
+            font-weight: bold;
         }
 
-        .stat-card .value {
-            font-family:'Orbitron',sans-serif;
-            font-size:2.3em; font-weight:700;
-            margin-bottom:6px; line-height:1;
-        }
-        .stat-card.total     .value { color:var(--neon-red);   text-shadow:0 0 12px rgba(255,34,85,.8); }
-        .stat-card.greenline .value { color:var(--neon-green); text-shadow:0 0 12px rgba(57,255,20,.8); }
-        .stat-card.detachment .value{ color:#ff55ee;            text-shadow:0 0 12px rgba(255,85,238,.8); }
-        .stat-card.repair    .value { color:var(--neon-cyan);  text-shadow:0 0 12px rgba(0,245,255,.8); }
+        .header .subtitle { color: #7c7ff0; font-size: 1.1em; margin-top: 8px; font-weight: bold;}
+        .header .date-range { color: #a0aec0; font-size: 0.9em; margin-top: 5px; }
 
-        /* CHART SECTIONS */
-        .chart-section {
-            background:var(--card-bg);
-            border:1px solid var(--card-border);
-            border-radius:16px;
-            padding:28px 28px 24px;
-            margin-bottom:18px;
-            box-shadow:0 0 20px rgba(0,245,255,0.06);
-        }
-        
-        /* 標題與按鈕的 Flex 排版 */
-        .section-header {
+        /* 🚀 頁籤按鈕專區設計 */
+        .tabs-container {
             display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-        .section-header h2 {
-            font-family:'Noto Sans TC',sans-serif;
-            color:#fff; font-size:1.15em; font-weight:500;
-            margin-bottom:0; 
-            padding-left:14px;
-            border-left:3px solid var(--neon-cyan);
-            letter-spacing:1px;
-            text-shadow:0 0 8px rgba(0,245,255,.4);
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 25px;
         }
 
-        .chart-box { width:100%; }
+        .tab-btn {
+            background: rgba(255, 255, 255, 0.9);
+            color: #7c7ff0;
+            border: 2px solid #7c7ff0;
+            padding: 12px 30px;
+            font-size: 1.15em;
+            font-family: 'Microsoft JhengHei', sans-serif;
+            font-weight: bold;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
 
-        .two-col { display:grid; grid-template-columns:1fr 1fr; gap:18px; margin-bottom:18px; }
-
-        /* TOGGLE */
-        .toggle-buttons { display:flex; gap:12px; }
-        .toggle-btn {
-            padding:9px 22px;
-            border:1px solid rgba(0,245,255,.35);
-            border-radius:6px; cursor:pointer;
-            font-size:.9em; font-family:'Noto Sans TC',sans-serif;
-            background:rgba(0,245,255,.05);
-            color:rgba(180,220,255,.7);
-            transition:all .25s; letter-spacing:.5px;
-        }
-        .toggle-btn.active {
-            background:rgba(0,245,255,.15);
-            color:var(--neon-cyan);
-            border-color:var(--neon-cyan);
-            box-shadow:0 0 10px rgba(0,245,255,.3);
-        }
-        .toggle-btn:hover { border-color:var(--neon-cyan); color:var(--neon-cyan); }
-
-        /* BOTTOM CARDS */
-        .bottom-cards {
-            display:grid; grid-template-columns:repeat(4,1fr);
-            gap:14px; margin-top:20px;
-        }
-        
-        .bottom-card {
-            text-align:center; padding:18px 10px;
-            background:rgba(0,0,0,.4);
-            border:1px solid rgba(255,34,85,.3);
-            border-radius:10px;
-            transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
-            cursor: default;
-        }
-        .bottom-card .label { 
-            font-size:.82em; color:rgba(180,200,255,.6); margin-bottom:8px; 
-            transition: color 0.3s ease, text-shadow 0.3s ease;
-        }
-        
-        .bottom-card:hover {
-            border-color: var(--neon-red);
-            box-shadow: 0 0 15px rgba(255, 34, 85, 0.6);
+        .tab-btn:hover {
             transform: translateY(-2px);
-        }
-        .bottom-card:hover .label {
-            color: #ffffff;
-            text-shadow: 0 0 8px rgba(255,255,255,0.6);
+            box-shadow: 0 6px 20px rgba(124, 127, 240, 0.4);
         }
 
-        .bottom-card .value {
-            font-family:'Orbitron',sans-serif;
-            font-size:1.8em; font-weight:700;
-            color:var(--neon-red);
-            text-shadow:0 0 10px rgba(255,34,85,.8);
+        .tab-btn.active {
+            background: #7c7ff0;
+            color: white;
+            box-shadow: 0 6px 20px rgba(124, 127, 240, 0.5);
         }
 
-        /* FOOTNOTE */
-        .footnote {
-            margin-top:16px; padding:12px 16px;
-            background:rgba(0,245,255,.04);
-            border:1px solid rgba(0,245,255,.12);
-            border-radius:8px;
-            font-size:.82em; color:rgba(160,190,230,.75);
-            line-height:1.65;
-            transition: color 0.3s ease, text-shadow 0.3s ease;
-            cursor: default;
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.4s ease-out;
         }
-        .footnote:hover {
-            color: #ffffff;
-            text-shadow: 0 0 5px rgba(255,255,255,0.4);
-        }
-        .footnote strong { color:var(--neon-cyan); }
 
-        /* 📱 手機版響應式設計 (RWD) 強化 */
-        @media(max-width:768px){
-            body { padding: 12px 10px; }
-            .header { padding: 20px 15px; }
-            .header h1 { font-size: 1.5em; letter-spacing: 1px; }
-            .stats-grid, .bottom-cards { grid-template-columns: repeat(2, 1fr); gap: 10px; }
-            .stat-card { padding: 16px 10px; }
-            .stat-card .value { font-size: 1.8em; }
-            .two-col { grid-template-columns: 1fr; gap: 14px; }
-            .chart-section { padding: 16px 12px 12px; margin-bottom: 14px; }
-            .section-header { flex-direction: column; align-items: flex-start; gap: 14px; }
-            .section-header h2 { font-size: 1.05em; margin-bottom: 0; }
-            .toggle-buttons { flex-direction: column; width: 100%; gap: 8px; }
-            .toggle-btn { width: 100%; padding: 10px; text-align: center; }
-            .bottom-card .value { font-size: 1.4em; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* 卡片與圖表區塊 (通用) */
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 18px; margin-bottom: 18px; }
+        .stat-card { background: white; border-radius: 15px; padding: 25px 18px; text-align: center; box-shadow: 0 5px 20px rgba(0,0,0,0.1); }
+        .stat-card .label { font-size: 1em; color: #4a5568; margin-bottom: 12px; font-weight: 500; }
+        .stat-card .value { font-size: 2.5em; font-weight: 700; margin-bottom: 8px; line-height: 1; }
+        .stat-card .desc { font-size: 0.85em; color: #a0aec0; line-height: 1.4; }
+        
+        /* 特定卡片顏色 */
+        .stat-card.total .value { color: #e53e3e; }
+        .stat-card.greenline .value { color: #48bb78; }
+        .stat-card.detachment .value { color: #2d3748; }
+        .stat-card.repair .value { color: #4299e1; }
+
+        .chart-section { background: white; border-radius: 18px; padding: 30px; margin-bottom: 18px; box-shadow: 0 5px 20px rgba(0,0,0,0.1); }
+        .chart-section h2 { color: #2d3748; font-size: 1.3em; margin-bottom: 22px; padding-left: 12px; border-left: 4px solid #7c7ff0; font-weight: bold; }
+        .chart-container { position: relative; height: 380px; }
+        .chart-container.small { height: 320px; }
+
+        /* 底部數據列 */
+        .bottom-cards { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin-top: 22px; }
+        .bottom-card { text-align: center; padding: 20px 12px; background: #f7fafc; border-radius: 12px; }
+        .bottom-card .label { font-size: 0.85em; color: #4a5568; margin-bottom: 8px; }
+        .bottom-card .value { font-size: 2em; font-weight: 700; color: #e53e3e; }
+
+        /* 第二頁籤專用樣式 (整合自原暗色版) */
+        .alert-box { background: #fff5f5; border: 3px solid #e53e3e; padding: 25px; border-radius: 15px; margin-bottom: 20px; }
+        .alert-box h2 { color: #e53e3e; margin-bottom: 15px; font-size: 1.4em; }
+        .alert-box p { line-height: 1.6; font-size: 1.1em; color: #2d3748; }
+        
+        .myth-vs-reality { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 30px; }
+        .myth-box, .reality-box { padding: 30px; border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.1); color: white; }
+        .myth-box { background: linear-gradient(135deg, #fc8181 0%, #e53e3e 100%); }
+        .reality-box { background: linear-gradient(135deg, #48bb78 0%, #38a169 100%); }
+        .myth-box h3, .reality-box h3 { font-size: 1.4em; margin-bottom: 20px; }
+        .myth-box ul, .reality-box ul { list-style: none; padding: 0; }
+        .myth-box li, .reality-box li { padding: 10px 0; padding-left: 25px; position: relative; font-size: 1.05em;}
+        .myth-box li:before { content: "❌"; position: absolute; left: 0; }
+        .reality-box li:before { content: "✓"; position: absolute; left: 0; }
+
+        .model-diagram { background: white; border-radius: 15px; padding: 40px; margin-bottom: 30px; box-shadow: 0 5px 20px rgba(0,0,0,0.1); }
+        .model-diagram h2 { color: #2d3748; margin-bottom: 30px; text-align: center; font-size: 1.6em; font-weight:bold; }
+        .diagram { display: flex; flex-direction: column; align-items: center; gap: 20px; }
+        .diagram-box { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 20px 40px; border-radius: 10px; font-size: 1.2em; font-weight: bold; box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
+        .arrow { font-size: 2em; color: #667eea; }
+        .split { display: flex; gap: 30px; justify-content: center; width: 100%;}
+        .split-box { background: #f7fafc; border: 2px solid #e2e8f0; padding: 20px 30px; border-radius: 10px; font-size: 1.1em; flex: 1; text-align: center;}
+        
+        .conclusion-item { background: #f7fafc; border-left: 5px solid #667eea; padding: 20px; margin-bottom: 15px; border-radius: 8px; }
+        .conclusion-item h3 { color: #2d3748; margin-bottom: 10px; }
+        .conclusion-item p { color: #4a5568; line-height: 1.6;}
+
+        @media (max-width: 768px) {
+            .stats-grid, .bottom-cards { grid-template-columns: repeat(2, 1fr); }
+            .myth-vs-reality { grid-template-columns: 1fr; }
+            .split { flex-direction: column; gap: 15px; }
         }
     </style>
 </head>
 <body>
-<div class="container">
+    <div class="container">
+        <div class="header">
+            <h1>三星綠線門災情分析與真相報告</h1>
+            <div class="subtitle">【基於 2,427 份真實用戶回報的深度數據分析】</div>
+            <div class="date-range">統計期間：2024/09/03 ~ 2026/02/14</div>
+        </div>
 
-    <div class="header">
-        <h1>三星綠線門災情分析報告</h1>
-        <div class="subtitle"> 【 基於 2,437 份用戶回報的深度數據分析 】 </div>
-        <div class="date-range">統計期間：2024/09/03 ～ 2026/02/14</div>
-    </div>
+        <div class="tabs-container">
+            <button class="tab-btn active" onclick="openTab(event, 'tab1')">📊 總覽與機型分佈</button>
+            <button class="tab-btn" onclick="openTab(event, 'tab2')">🔬 脫膠 vs 綠線 真相解析</button>
+        </div>
 
-    <div class="stats-grid">
-        <div class="stat-card total">
-            <div class="label">有效樣本</div>
-            <div class="value">2,427</div>
-            <div class="desc">✅  總回報數 2,437 份</div>
-        </div>
-        <div class="stat-card greenline">
-            <div class="label">亮線率</div>
-            <div class="value">87.1%</div>
-            <div class="desc">✅  2,114 位用戶反映螢幕亮線</div>
-        </div>
-        <div class="stat-card detachment">
-            <div class="label">脫膠率</div>
-            <div class="value">32.2%</div>
-            <div class="desc">✅  782 位用戶背蓋脫膠</div>
-        </div>
-        <div class="stat-card repair">
-            <div class="label">客戶流失風險</div>
-            <div class="value">86.9%</div>
-            <div class="desc">✅ 不再購買+猶豫不決</div>
-        </div>
-    </div>
+        <div id="tab1" class="tab-content" style="display: block;">
+            
+            <div class="stats-grid">
+                <div class="stat-card total">
+                    <div class="label">總回報數</div>
+                    <div class="value">2,437</div>
+                    <div class="desc">✅ 有效樣本 2,427 份</div>
+                </div>
+                <div class="stat-card greenline">
+                    <div class="label">亮線率</div>
+                    <div class="value">87.1%</div>
+                    <div class="desc">✅ 2,114 位用戶反映螢幕亮線</div>
+                </div>
+                <div class="stat-card detachment">
+                    <div class="label">脫膠率</div>
+                    <div class="value">32.2%</div>
+                    <div class="desc">✅ 782 位用戶背蓋脫膠</div>
+                </div>
+                <div class="stat-card repair">
+                    <div class="label">客戶流失風險</div>
+                    <div class="value">86.9%</div>
+                    <div class="desc">✅ 不再購買+猶豫不決</div>
+                </div>
+            </div>
 
-    <div class="two-col">
-        <div class="chart-section">
-            <h2 style="margin-bottom: 20px;">螢幕症狀分類</h2>
-            <div id="symptomChart" class="chart-box" style="height:300px;"></div>
-        </div>
-        <div class="chart-section">
-            <h2 style="margin-bottom: 20px;">受災系列分布</h2>
-            <div id="seriesChart" class="chart-box" style="height:300px;"></div>
-        </div>
-    </div>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 18px; margin-bottom: 18px;">
+                <div class="chart-section">
+                    <h2>螢幕症狀分類</h2>
+                    <div class="chart-container small"><canvas id="symptomChart"></canvas></div>
+                </div>
+                <div class="chart-section">
+                    <h2>受災系列分布</h2>
+                    <div class="chart-container small"><canvas id="seriesChart"></canvas></div>
+                </div>
+            </div>
 
-    <div class="chart-section">
-        <div class="section-header">
-            <h2>受災機型分布（前 10 名）</h2>
-            <div class="toggle-buttons">
-                <button class="toggle-btn" id="btn-individual" onclick="toggleModelView('individual', this)">個別檢視</button>
-                <button class="toggle-btn active" id="btn-series" onclick="toggleModelView('series', this)">系列同色</button>
+            <div class="chart-section">
+                <h2>受災機型分布（前10名）</h2>
+                <div class="chart-container"><canvas id="modelChart"></canvas></div>
+            </div>
+
+            <div class="chart-section">
+                <h2>各系列脫膠者 vs 非脫膠者的綠線率對比</h2>
+                <div class="chart-container"><canvas id="comparisonChart"></canvas></div>
+                <div style="margin-top: 15px; color:#4a5568; font-size: 0.9em; background:#f7fafc; padding:15px; border-radius:8px;">
+                    <strong>數據觀察：</strong>所有系列（除了樣本過小的S22）都是「無脫膠」的綠線率更高或相近，初步顯示脫膠並非綠線主因。詳情請見第二頁籤解析。
+                </div>
             </div>
         </div>
-        <div id="modelChart" class="chart-box" style="height:370px;"></div>
-    </div>
 
-    <div class="chart-section">
-        <div class="section-header">
-            <h2>背蓋脫膠與時間因素關聯分析</h2>
-            <div class="toggle-buttons">
-                <button class="toggle-btn active" id="btn-top"  onclick="showTopModels(this)">前 10 機型脫膠率</button>
-                <button class="toggle-btn"        id="btn-year" onclick="showPurchaseYear(this)">不同購入年份脫膠比例</button>
+
+        <div id="tab2" class="tab-content">
+            
+            <div class="alert-box">
+                <h2>⚠️ 重大發現：反直覺的數據結果</h2>
+                <p>
+                    <strong>原假設：</strong>背蓋脫膠導致內部受潮或應力變化 → 造成綠線問題<br>
+                    <strong>預期：</strong>有脫膠者綠線率應該「更高」<br><br>
+                    <strong style="font-size: 1.3em; color: #e53e3e;">實際數據：有脫膠者綠線率 84.9% vs 無脫膠者 88.1%</strong><br>
+                    <strong>❌ 反而是「沒脫膠的人」綠線率更高！</strong>
+                </p>
             </div>
-        </div>
-        <div id="detachmentChart" class="chart-box" style="height:360px;"></div>
-        <div class="footnote" id="detachmentNote" style="margin-top:14px;">
-            <strong>註：</strong>背膠的「明顯失效期」大約落在使用 2～3 年之後開始大量增加，使用 3 年以上明顯變高，4～5 年有一半以上會脫膠。
-        </div>
-    </div>
 
-    <div class="chart-section">
-        <h2 style="margin-bottom: 20px;">各系列脫膠者 vs 非脫膠者的綠線率對比</h2>
-        <div id="comparisonChart" class="chart-box" style="height:380px;"></div>
-        <div class="footnote">       
-            <div class="bottom-cards" style="margin-top: 24px; margin-bottom: 20px;">
-                <div class="bottom-card"><div class="label">有脫膠者綠線率</div><div class="value">84.9%</div></div>
-                <div class="bottom-card"><div class="label">無脫膠者綠線率</div><div class="value">88.1%</div></div>
-                <div class="bottom-card"><div class="label">綠線用戶中無脫膠</div><div class="value">68.6%</div></div>
-                <div class="bottom-card"><div class="label">差異</div><div class="value">3.2%</div></div>
+            <div class="myth-vs-reality">
+                <div class="myth-box">
+                    <h3>❌ 原假設（被數據推翻）</h3>
+                    <ul>
+                        <li>背蓋脫膠導致綠線</li>
+                        <li>脫膠造成內部應力</li>
+                        <li>應力影響螢幕排線</li>
+                        <li>有脫膠者綠線率應更高</li>
+                        <li>兩者是直接因果關係</li>
+                    </ul>
+                </div>
+                <div class="reality-box">
+                    <h3>✓ 數據真相</h3>
+                    <ul>
+                        <li>兩者是「共同根源」關係</li>
+                        <li>都源於高溫 + 時間老化</li>
+                        <li>但觸發機制完全獨立</li>
+                        <li>68.6% 綠線用戶沒脫膠</li>
+                        <li>脫膠不是綠線必要條件</li>
+                    </ul>
+                </div>
             </div>
-                 🔥<strong>卡方檢定 (χ²)：</strong> χ²≈0.022，遠小於3.84（df=1,p=0.05門檻)【結論➡️現有數據不支持「背膠脫膠→直接造成綠線」假設。】🔥   </div>
-    </div>                                  （Release by Youtube@bnBryan March 13, 2026）   
-        </div>
-    </div>
 
-</div>
+            <div class="model-diagram">
+                <h2>🔬 正確的因果關係模型</h2>
+                <div class="diagram">
+                    <div class="diagram-box">共同根源：高溫 + 時間 + 材料老化</div>
+                    <div class="arrow">↓</div>
+                    <div class="split">
+                        <div class="split-box">
+                            <strong style="color: #e53e3e; font-size:1.2em;">🔥背蓋脫膠</strong><br><br>
+                            • 膠材在 50~60°C+ 降解<br>
+                            • 發生率：32.2%<br>
+                            • 時間相關性：極強 (越久越易脫)
+                        </div>
+                        <div class="split-box">
+                            <strong style="color: #e53e3e; font-size:1.2em;">🔥綠線問題</strong><br><br>
+                            • 排線/ACF 高溫失效<br>
+                            • 發生率：87.1%<br>
+                            • 發生範圍：跨越新舊世代
+                        </div>
+                    </div>
+                </div>
+                <div style="margin-top: 30px; padding: 20px; background: #fff5f5; border-radius: 10px;">
+                    <h3 style="color: #e53e3e; margin-bottom: 15px;">💡 關鍵洞察</h3>
+                    <p style="line-height: 1.8; color:#2d3748; font-weight:500;">
+                        • 兩者皆與「溫度」和「時間」相關，但<strong>各自有獨立失效模式</strong>。<br>
+                        • 綠線發生率遠高於脫膠（87% vs 32%），綠線才是主要的系統性問題。<br>
+                        • <strong>結論：即使背蓋完好，綠線照樣會出現。</strong>
+                    </p>
+                </div>
+            </div>
 
-<script>
-// ── 共用色票 ──────────────────────────────────
-const C = {
-    red:    '#ff2255',
-    orange: '#ff6600',
-    yellow: '#ffe600',
-    green:  '#39ff14',
-    cyan:   '#00f5ff',
-    blue:   '#0088ff',
-    purple: '#bf00ff',
-    pink:   '#ff55ee',
-    gray:   '#6677aa'
-};
+            <div class="chart-section">
+                <h2>🔍 案例研究：S21系列（最能說明問題的系列）</h2>
+                <div class="chart-container" style="height: 350px;">
+                    <canvas id="s21CaseChart"></canvas>
+                </div>
+                <div style="margin-top: 20px; padding: 20px; background: #f0fff4; border-radius: 10px;">
+                    <h3 style="color: #38a169; margin-bottom: 10px;">S21系列的啟示</h3>
+                    <p style="line-height: 1.8; color:#2d3748;">
+                        • 總樣本：827 人（最大受災群體）<br>
+                        • 有脫膠者綠線率：<strong>97.5%</strong> / 無脫膠者綠線率：<strong>98.4%</strong><br>
+                        • 差異：僅 <strong>0.9%</strong>，幾乎相同！<br><br>
+                        <strong>結論：</strong>在S21系列中，不管背蓋有沒有脫膠，幾乎每個人都會遇到綠線問題（98%）。<strong>證明脫膠與綠線沒有直接因果關係。</strong>
+                    </p>
+                </div>
+            </div>
 
-// ── 共用文字色 ────────────────────────────────
-const LABEL_COLOR  = 'rgba(160,190,230,0.85)';
-const AXIS_LINE    = 'rgba(255,255,255,0.08)';
-const SPLIT_LINE   = 'rgba(255,255,255,0.06)';
-const TOOLTIP_BG   = 'rgba(10,14,30,0.95)';
-const TOOLTIP_BORDER = 'rgba(0,245,255,0.5)';
-// 共用字型
-const CHART_FONT   = "'Noto Sans TC', sans-serif"; 
+            <div class="chart-section" style="background:transparent; box-shadow:none; padding:0;">
+                <div class="conclusion-item">
+                    <h3>1️⃣ 時間是脫膠的關鍵，但不是綠線的絕對關鍵</h3>
+                    <p>
+                        用越久越容易脫膠；但綠線問題在 S22/S23 這些較年輕的機型上，回報率也已高達 77-80%，顯示其設計耐受度普遍不足。
+                    </p>
+                </div>
+                <div class="conclusion-item">
+                    <h3>2️⃣ 脫膠可能加劇「其他症狀」</h3>
+                    <p>
+                        有脫膠者發生「亮屏/綠屏」與「其他異常」的比例略高，可能與水氣灰塵進入有關，但對最常見的「綠色亮線」症狀沒有顯著影響。
+                    </p>
+                </div>
+                <div class="conclusion-item">
+                    <h3>3️⃣ 給消費者的實用啟示</h3>
+                    <p>
+                        真正的罪魁禍首是<strong>「面板排線接合處可靠度失效」+「材料耐熱性不足」</strong>。原廠需要解決的是加固排線封裝，而不僅僅是處理背膠問題。
+                    </p>
+                </div>
+            </div>
 
-function mkChart(id) {
-    return echarts.init(document.getElementById(id), null, { renderer: 'svg' });
-}
+        </div> </div>
 
-function tooltip(fmt) {
-    return {
-        backgroundColor: TOOLTIP_BG,
-        borderColor: TOOLTIP_BORDER,
-        borderWidth: 1,
-        textStyle: { color: '#e0e8ff', fontSize: 14, fontFamily: CHART_FONT },
-        formatter: fmt
-    };
-}
+    <script>
+        // 🚀 頁籤切換與 Chart.js 重繪邏輯
+        function openTab(evt, tabName) {
+            let i, tabcontent, tablinks;
+            
+            // 隱藏所有內容
+            tabcontent = document.getElementsByClassName("tab-content");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+            }
+            
+            // 移除所有按鈕的 active 狀態
+            tablinks = document.getElementsByClassName("tab-btn");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].className = tablinks[i].className.replace(" active", "");
+            }
+            
+            // 顯示當前點擊的頁籤
+            document.getElementById(tabName).style.display = "block";
+            evt.currentTarget.className += " active";
 
-function axisBase(name) {
-    return {
-        nameTextStyle: { color: LABEL_COLOR, fontSize: 13, fontFamily: CHART_FONT },
-        axisLabel:     { color: LABEL_COLOR, fontSize: 13, fontFamily: CHART_FONT },
-        axisLine:      { lineStyle: { color: AXIS_LINE } },
-        axisTick:      { lineStyle: { color: AXIS_LINE } },
-        splitLine:     { lineStyle: { color: SPLIT_LINE } },
-        name
-    };
-}
+            // ⚠️ 關鍵黑科技：強制觸發視窗 Resize 讓 Chart.js 重新計算寬度
+            setTimeout(() => {
+                window.dispatchEvent(new Event('resize'));
+            }, 50);
+        }
 
-// ────────────────────────────────────────────────
-// 1. 螢幕症狀 Donut
-// ────────────────────────────────────────────────
-(function() {
-    const chart = mkChart('symptomChart');
-    chart.setOption({
-        backgroundColor: 'transparent',
-        tooltip: tooltip(p => `${p.name}<br/><b style="color:${p.color}">${p.value}%</b>`),
-        legend: {
-            bottom: 4, orient: 'horizontal',
-            textStyle: { color: LABEL_COLOR, fontSize: 13, fontFamily: CHART_FONT },
-            icon: 'circle', itemWidth: 10, itemHeight: 10
-        },
-        series: [{
-            type: 'pie',
-            radius: ['42%', '70%'],
-            center: ['50%', '46%'],
-            avoidLabelOverlap: true,
-            label: { show: false },
-            labelLine: { show: false },
-            emphasis: {
-                scale: true, scaleSize: 6,
-                itemStyle: { shadowBlur: 20, shadowColor: 'rgba(0,245,255,0.5)' }
-            },
-            data: [
-                { name:'綠色亮線',   value:87.1, itemStyle:{ color:C.cyan } },
-                { name:'亮屏/綠屏', value:6.0,  itemStyle:{ color:C.orange } },
-                { name:'其他',       value:3.6,  itemStyle:{ color:C.gray } },
-                { name:'螢幕閃爍',   value:1.3,  itemStyle:{ color:C.yellow } },
-                { name:'鏡頭區異常', value:2.0,  itemStyle:{ color:C.red } }
-            ]
-        }]
-    });
-    window.addEventListener('resize', () => chart.resize());
-})();
+        // 📊 圖表初始化區塊
+        document.addEventListener('DOMContentLoaded', function() {
+            const colors = {
+                note20: '#e74c3c', s20: '#e74c3c', s21: '#f39c12', 
+                s22: '#27ae60', s23: '#27ae60', purple: '#7c7ff0'
+            };
 
-// ────────────────────────────────────────────────
-// 2. 受災系列 Donut
-// ────────────────────────────────────────────────
-(function() {
-    const chart = mkChart('seriesChart');
-    chart.setOption({
-        backgroundColor: 'transparent',
-        tooltip: tooltip(p => `${p.name}<br/><b style="color:${p.color}">${p.value}%</b>`),
-        legend: {
-            bottom: 4, orient: 'horizontal',
-            textStyle: { color: LABEL_COLOR, fontSize: 10.5, fontFamily: CHART_FONT },
-            icon: 'circle', itemWidth: 10, itemHeight: 10
-        },
-        series: [{
-            type: 'pie',
-            radius: ['42%', '70%'],
-            center: ['50%', '46%'],
-            avoidLabelOverlap: true,
-            label: { show: false },
-            labelLine: { show: false },
-            emphasis: {
-                scale: true, scaleSize: 6,
-                itemStyle: { shadowBlur: 20, shadowColor: 'rgba(0,245,255,0.5)' }
-            },
-            data: [
-                { name:'S21系列',   value:34.1, itemStyle:{ color:C.orange } },
-                { name:'S22系列',   value:19.2, itemStyle:{ color:C.green } },
-                { name:'Note20系列',value:17.2, itemStyle:{ color:C.red } },
-                { name:'S20系列',   value:14.0, itemStyle:{ color:C.pink } },
-                { name:'Flip系列',  value:4.1,  itemStyle:{ color:C.purple } },
-                { name:'S23系列',   value:2.9,  itemStyle:{ color:C.cyan } },
-                { name:'Fold系列',  value:1.4,  itemStyle:{ color:C.yellow } },
-                { name:'其他',      value:7.1,  itemStyle:{ color:C.gray } }
-            ]
-        }]
-    });
-    window.addEventListener('resize', () => chart.resize());
-})();
-
-// ────────────────────────────────────────────────
-// 3. 機型 TOP 10 水平長條 (✅ 修正：滑鼠移入才發光)
-// ────────────────────────────────────────────────
-let modelChart;
-const modelLabels = ['Note20 Ultra 5G','S21 FE','S20+','S21+ 5G','S21 Ultra 5G','S21 5G','S22+','S22 Ultra','S22','S20 Ultra'].reverse();
-const modelValues = [409, 238, 214, 200, 199, 190, 174, 168, 124, 84].reverse();
-const seriesBarColors = [C.red,C.orange,C.red,C.orange,C.orange,C.orange,C.green,C.green,C.green,C.red].reverse();
-const individualBarColors = Array(10).fill(C.cyan);
-
-(function() {
-    modelChart = mkChart('modelChart');
-    modelChart.setOption({
-        backgroundColor: 'transparent',
-        grid: { left: '2%', right: '8%', top: 14, bottom: '2%', containLabel: true },
-        tooltip: tooltip(p => {
-            const color = p.color; 
-            return `${p.name}<br/><b style="color:${color}">${p.value} 台</b>`;
-        }),
-        xAxis: { ...axisBase('受災數量（台）'), type:'value', min:0 },
-        yAxis: {
-            type: 'category',
-            data: modelLabels,
-            axisLabel: { color: LABEL_COLOR, fontSize: 13, fontFamily: CHART_FONT },
-            axisLine: { lineStyle: { color: AXIS_LINE } },
-            axisTick: { show: false },
-            splitLine: { show: false }
-        },
-        series: [{
-            type: 'bar',
-            data: modelValues.map((v, i) => ({
-                value: v,
-                // 預設外觀：不發光
-                itemStyle: { 
-                    color: seriesBarColors[i], 
-                    borderRadius:[0,4,4,0],
-                    shadowBlur: 0
+            /* === 第一頁籤圖表 === */
+            // 1. 症狀分類
+            new Chart(document.getElementById('symptomChart'), {
+                type: 'doughnut',
+                data: {
+                    labels: ['綠色亮線', '亮屏/綠屏', '其他', '螢幕閃爍', '鏡頭區異常'],
+                    datasets: [{ data: [87.1, 6.0, 3.6, 1.3, 2.0], backgroundColor: ['#7c7ff0', '#f39c12', '#c0c0c0', '#ffd700', '#e74c3c'], borderWidth: 2, borderColor: '#fff' }]
                 },
-                // 滑鼠懸停外觀 (Hover)：加上霓虹發光效果
-                emphasis: {
-                    itemStyle: {
-                        shadowBlur: 15,
-                        shadowColor: seriesBarColors[i]
-                    }
-                }
-            })),
-            barWidth: 20,
-            label: {
-                show: true, position: 'right',
-                color: LABEL_COLOR, fontSize: 13, fontFamily: CHART_FONT,
-                formatter: '{c}'
-            }
-        }]
-    });
-    window.addEventListener('resize', () => modelChart.resize());
-})();
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom' } } }
+            });
 
-window.toggleModelView = function(mode, btn) {
-    const buttons = btn.parentElement.querySelectorAll('.toggle-btn');
-    buttons.forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-
-    const colors = mode === 'series' ? seriesBarColors : individualBarColors;
-    
-    modelChart.setOption({
-        series: [{
-            data: modelValues.map((v, i) => ({
-                value: v,
-                // 預設外觀：不發光，只套用顏色
-                itemStyle: { 
-                    color: colors[i], 
-                    borderRadius: [0,4,4,0],
-                    shadowBlur: 0
+            // 2. 受災系列分布
+            new Chart(document.getElementById('seriesChart'), {
+                type: 'doughnut',
+                data: {
+                    labels: ['S21系列', 'S22系列', 'Note20系列', 'S20系列', 'Flip系列', 'S23系列', 'Fold系列', '其他'],
+                    datasets: [{ data: [34.1, 19.2, 17.2, 14.0, 4.1, 2.9, 1.4, 7.1], backgroundColor: ['#7c7ff0', '#27ae60', '#e74c3c', '#f39c12', '#3498db', '#9b59b6', '#1abc9c', '#95a5a6'], borderWidth: 2, borderColor: '#fff' }]
                 },
-                // 滑鼠懸停外觀 (Hover)：發出對應顏色的霓虹光
-                emphasis: {
-                    itemStyle: {
-                        shadowBlur: 15,
-                        shadowColor: colors[i]
-                    }
-                }
-            }))
-        }]
-    });
-};
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom' } } }
+            });
 
-// ────────────────────────────────────────────────
-// 4. 脫膠圖（可切換）
-// ────────────────────────────────────────────────
-let detachChart = mkChart('detachmentChart');
+            // 3. 受災機型 TOP 10
+            new Chart(document.getElementById('modelChart'), {
+                type: 'bar',
+                data: {
+                    labels: ['Note20 Ultra', 'S21 FE', 'S20+', 'S21+', 'S21 Ultra', 'S21', 'S22+', 'S22 Ultra', 'S22', 'S20 Ultra'],
+                    datasets: [{
+                        data: [409, 238, 214, 200, 199, 190, 174, 168, 124, 84],
+                        backgroundColor: [colors.note20, colors.s21, colors.s20, colors.s21, colors.s21, colors.s21, colors.s22, colors.s22, colors.s22, colors.s20],
+                    }]
+                },
+                options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
+            });
 
-function renderTopModels() {
-    const labels = ['Note20\nUltra 5G','S20\nUltra','S20+','S21 5G','S21\nUltra 5G','S21+ 5G','S21 FE','S22\nUltra','S22','S22+'];
-    const values = [52.6, 47.6, 45.3, 42.1, 41.2, 36.0, 35.3, 3.0, 2.4, 2.3];
-    const barColors = [C.red,C.red,C.red,C.orange,C.orange,C.orange,C.orange,C.green,C.green,C.green];
+            // 4. 各系列對比圖 (脫膠 vs 無脫膠 綠線率)
+            new Chart(document.getElementById('comparisonChart'), {
+                type: 'bar',
+                data: {
+                    labels: ['Note20系列', 'S20系列', 'S21系列', 'S22系列', 'S23系列'],
+                    datasets: [
+                        { label: '有脫膠者綠線率', data: [88.6, 78.2, 97.5, 91.7, 44.4], backgroundColor: '#e74c3c' },
+                        { label: '無脫膠者綠線率', data: [94.0, 87.0, 98.4, 80.0, 82.3], backgroundColor: '#27ae60' }
+                    ]
+                },
+                options: { responsive: true, maintainAspectRatio: false, scales: { y: { max: 100 } } }
+            });
 
-    detachChart.setOption({
-        backgroundColor: 'transparent',
-        grid: { left: '2%', right: '2%', top: 30, bottom: '8%', containLabel: true },
-        tooltip: tooltip(p => `${p.name.replace(/\n/,' ')}<br/><b style="color:${barColors[p.dataIndex]}">${p.value}%</b>`),
-        xAxis: {
-            type: 'category',
-            data: labels,
-            axisLabel: {
-                color: LABEL_COLOR, fontSize: 12, fontFamily: CHART_FONT,
-                interval: 0,
-                formatter: '{value}'
-            },
-            axisLine:  { lineStyle:{ color:AXIS_LINE } },
-            axisTick:  { show: false },
-            splitLine: { show: false }
-        },
-        yAxis: { ...axisBase('脫膠率 (%)'), type:'value', min:0, max:60 },
-        series: [{
-            type: 'bar',
-            data: values.map((v,i) => ({
-                value: v,
-                itemStyle: { color: barColors[i], borderRadius:[4,4,0,0] }
-            })),
-            barWidth: 28,
-            label: {
-                show: true, position: 'top',
-                color: LABEL_COLOR, fontSize: 13, fontFamily: CHART_FONT,
-                formatter: '{c}%'
-            }
-        }]
-    }, true);
-}
 
-function renderPurchaseYear() {
-    const yearColors = [C.red,C.orange,C.yellow,C.green,C.cyan,C.purple,C.blue];
-    detachChart.setOption({
-        backgroundColor: 'transparent',
-        grid: { left: '2%', right: '2%', top: 30, bottom: '8%', containLabel: true },
-        tooltip: tooltip(p => `${p.name} 年<br/><b style="color:${yearColors[p.dataIndex]}">${p.value}%</b>`),
-        xAxis: {
-            type: 'category',
-            data: ['2019','2020','2021','2022','2023','2024','2025'],
-            name: '購入年份',
-            nameTextStyle: { color: LABEL_COLOR, fontSize: 13, fontFamily: CHART_FONT },
-            axisLabel: { color: LABEL_COLOR, fontSize: 13, fontFamily: CHART_FONT },
-            axisLine:  { lineStyle:{ color:AXIS_LINE } },
-            axisTick:  { show: false },
-            splitLine: { show: false }
-        },
-        yAxis: { ...axisBase('脫膠比例 (%)'), type:'value', min:0, max:60 },
-        series: [{
-            type: 'bar',
-            data: [52.9,55.1,43.1,24.8,20.7,17.6,16.7].map((v,i) => ({
-                value: v,
-                itemStyle: { color: yearColors[i], borderRadius:[4,4,0,0] }
-            })),
-            barWidth: 52,
-            label: {
-                show: true, position: 'top',
-                color: LABEL_COLOR, fontSize: 13, fontFamily: CHART_FONT,
-                formatter: '{c}%'
-            }
-        }]
-    }, true);
-}
+            /* === 第二頁籤圖表 === */
+            // 5. S21 案例圖
+            new Chart(document.getElementById('s21CaseChart'), {
+                type: 'doughnut',
+                data: {
+                    labels: ['有脫膠+綠線', '有脫膠+無綠線', '無脫膠+綠線', '無脫膠+無綠線'],
+                    datasets: [{
+                        data: [310, 8, 501, 8],
+                        backgroundColor: ['rgba(229, 62, 62, 0.8)', 'rgba(252, 129, 129, 0.6)', 'rgba(72, 187, 120, 0.8)', 'rgba(154, 230, 180, 0.6)']
+                    }]
+                },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'right' } } }
+            });
 
-window.showTopModels = function(btn) {
-    document.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    document.getElementById('detachmentNote').innerHTML =
-        '<strong>註：</strong>「前 10 機型脫膠率」顯示受災數量最多的 10 個單一機型。紅色代表 2020 年機型（高危），橘色代表 2021 年機型（中危），綠色代表 2022 年機型（低危）。';
-    renderTopModels();
-};
-window.showPurchaseYear = function(btn) {
-    document.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    document.getElementById('detachmentNote').innerHTML =
-        '<strong>註：</strong>背膠的「明顯失效期」大約落在【使用 2～3 年之後開始大量增加】，使用 3 年以上明顯變高，4～5 年有一半以上會脫膠。';
-    renderPurchaseYear();
-};
-
-renderTopModels();
-window.addEventListener('resize', () => detachChart.resize());
-
-// ────────────────────────────────────────────────
-// 5. 對比圖 Grouped Bar
-// ────────────────────────────────────────────────
-(function() {
-    const chart = mkChart('comparisonChart');
-    const series_labels = ['Note20系列','S20系列','S21系列','S22系列','S23系列'];
-    const withDetach    = [88.6, 78.2, 97.5, 91.7, 44.4];
-    const withoutDetach = [94.0, 87.0, 98.4, 80.0, 82.3];
-
-    chart.setOption({
-        backgroundColor: 'transparent',
-        grid: { left: '2%', right: '2%', top: 50, bottom: '8%', containLabel: true },
-        legend: {
-            top: 8,
-            data: [
-                { name:'有脫膠者綠線率', icon:'roundRect' },
-                { name:'無脫膠者綠線率', icon:'roundRect' }
-            ],
-            textStyle: { color: LABEL_COLOR, fontSize: 14, fontFamily: CHART_FONT },
-            itemWidth: 18, itemHeight: 10
-        },
-        tooltip: {
-            ...tooltip(),
-            trigger: 'axis',
-            axisPointer: { type:'shadow', shadowStyle:{ color:'rgba(0,245,255,0.04)' } },
-            formatter: params => {
-                let s = `<b style="color:#e0e8ff">${params[0].axisValue}</b><br/>`;
-                params.forEach(p => {
-                    s += `<span style="display:inline-block;width:10px;height:10px;border-radius:2px;background:${p.color};margin-right:6px;"></span>${p.seriesName}：<b style="color:${p.color}">${p.value}%</b><br/>`;
-                });
-                return s;
-            }
-        },
-        xAxis: {
-            type: 'category', data: series_labels,
-            axisLabel: { color: LABEL_COLOR, fontSize: 13, fontFamily: CHART_FONT },
-            axisLine:  { lineStyle:{ color:AXIS_LINE } },
-            axisTick:  { show: false },
-            splitLine: { show: false }
-        },
-        yAxis: { ...axisBase('綠線發生率 (%)'), type:'value', min:0, max:100 },
-        series: [
-            {
-                name: '有脫膠者綠線率',
-                type: 'bar', barWidth: '35%',
-                itemStyle: { color:C.red, borderRadius:[4,4,0,0] },
-                label: { show:true, position:'top', color:LABEL_COLOR, fontSize:13, fontFamily: CHART_FONT, formatter:'{c}%' },
-                data: withDetach
-            },
-            {
-                name: '無脫膠者綠線率',
-                type: 'bar', barWidth: '35%',
-                itemStyle: { color:C.green, borderRadius:[4,4,0,0] },
-                label: { show:true, position:'top', color:LABEL_COLOR, fontSize:13, fontFamily: CHART_FONT, formatter:'{c}%' },
-                data: withoutDetach
-            }
-        ]
-    });
-    window.addEventListener('resize', () => chart.resize());
-})();
-</script>
+        });
+    </script>
 </body>
 </html>
