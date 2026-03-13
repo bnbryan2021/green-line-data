@@ -171,7 +171,9 @@
     <div class="container">
         <div class="header">
             <h1>三星綠線門災情分析與真相報告</h1>
-            <div class="subtitle">【基於 2,427 份真實用戶回報的深度數據分析 by BN單身狗＠yt】</div>
+            <div class="subtitle">
+    <a href="https://youtu.be/tLm7Jbgq00I" target="_blank" style="color: #7c7ff0; text-decoration: none; transition: opacity 0.3s;" onmouseover="this.style.opacity=0.7" onmouseout="this.style.opacity=1">【基於 2,427 份真實用戶回報的深度數據分析 by BN單身狗@yt】</a>
+</div>
             <div class="date-range">統計期間：2024/09/03 ~ 2026/02/14</div>
         </div>
 
@@ -211,7 +213,7 @@
                     <div class="chart-container small"><canvas id="symptomChart"></canvas></div>
                 </div>
                 <div class="chart-section">
-                    <h2>受災系列分布</h2>
+                    <h2>受災分布</h2>
                     <div class="chart-container small"><canvas id="seriesChart"></canvas></div>
                 </div>
             </div>
@@ -222,10 +224,10 @@
             </div>
 
             <div class="chart-section">
-                <h2>各系列脫膠者 vs 非脫膠者的綠線率對比</h2>
+                <h2>各脫膠者 vs 非脫膠者的綠線率對比</h2>
                 <div class="chart-container"><canvas id="comparisonChart"></canvas></div>
                 <div style="margin-top: 15px; color:#4a5568; font-size: 0.9em; background:#f7fafc; padding:15px; border-radius:8px;">
-                    <strong>數據觀察：</strong>所有系列（除了樣本過小的S22）都是「無脫膠」的綠線率更高或相近，初步顯示脫膠並非綠線主因。詳情請見第二頁籤解析。
+                    <strong>數據觀察：</strong>所有（除了樣本過小的S22）都是「無脫膠」的綠線率更高或相近，初步顯示脫膠並非綠線主因。詳情請見第二頁籤解析。
                 </div>
             </div>
         </div>
@@ -297,17 +299,17 @@
             </div>
 
             <div class="chart-section">
-                <h2>🔍 案例研究：S21系列（最能說明問題的系列）</h2>
+                <h2>🔍 案例研究：S21（最能說明問題的）</h2>
                 <div class="chart-container" style="height: 350px;">
                     <canvas id="s21CaseChart"></canvas>
                 </div>
                 <div style="margin-top: 20px; padding: 20px; background: #f0fff4; border-radius: 10px;">
-                    <h3 style="color: #38a169; margin-bottom: 10px;">S21系列的啟示</h3>
+                    <h3 style="color: #38a169; margin-bottom: 10px;">S21的啟示</h3>
                     <p style="line-height: 1.8; color:#2d3748;">
                         • 總樣本：827 人（最大受災群體）<br>
                         • 有脫膠者綠線率：<strong>97.5%</strong> / 無脫膠者綠線率：<strong>98.4%</strong><br>
                         • 差異：僅 <strong>0.9%</strong>，幾乎相同！<br><br>
-                        <strong>結論：</strong>在S21系列中，不管背蓋有沒有脫膠，幾乎每個人都會遇到綠線問題（98%）。<strong>證明脫膠與綠線沒有直接因果關係。</strong>
+                        <strong>結論：</strong>在S21中，不管背蓋有沒有脫膠，幾乎每個人都會遇到綠線問題（98%）。<strong>證明脫膠與綠線沒有直接因果關係。</strong>
                     </p>
                 </div>
             </div>
@@ -374,17 +376,17 @@
             new Chart(document.getElementById('symptomChart'), {
                 type: 'doughnut',
                 data: {
-                    labels: ['綠色亮線', '亮屏/綠屏', '其他', '螢幕閃爍', '鏡頭區異常'],
+                    labels: ['亮線 V-line', '亮/綠屏 Blank ', '其他 Others', '螢幕閃爍 Flickering', '鏡頭區異常 White bar at the top of the screen'],
                     datasets: [{ data: [87.1, 6.0, 3.6, 1.3, 2.0], backgroundColor: ['#7c7ff0', '#f39c12', '#c0c0c0', '#ffd700', '#e74c3c'], borderWidth: 2, borderColor: '#fff' }]
                 },
                 options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom' } } }
             });
 
-            // 2. 受災系列分布
+            // 2. 受災分布
             new Chart(document.getElementById('seriesChart'), {
                 type: 'doughnut',
                 data: {
-                    labels: ['S21系列', 'S22系列', 'Note20系列', 'S20系列', 'Flip系列', 'S23系列', 'Fold系列', '其他'],
+                    labels: ['S21 Series', 'S22 Series', 'Note20 Series', 'S20 Series', 'Flip Series', 'S23 Series', 'Fold Series', 'Others'],
                     datasets: [{ data: [34.1, 19.2, 17.2, 14.0, 4.1, 2.9, 1.4, 7.1], backgroundColor: ['#7c7ff0', '#27ae60', '#e74c3c', '#f39c12', '#3498db', '#9b59b6', '#1abc9c', '#95a5a6'], borderWidth: 2, borderColor: '#fff' }]
                 },
                 options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom' } } }
@@ -407,10 +409,10 @@
             new Chart(document.getElementById('comparisonChart'), {
                 type: 'bar',
                 data: {
-                    labels: ['Note20系列', 'S20系列', 'S21系列', 'S22系列', 'S23系列'],
+                    labels: ['Note20 Series', 'S20 Series', 'S21 Series', 'S22 Series', 'S23 Series'],
                     datasets: [
-                        { label: '有脫膠者綠線率', data: [88.6, 78.2, 97.5, 91.7, 44.4], backgroundColor: '#e74c3c' },
-                        { label: '無脫膠者綠線率', data: [94.0, 87.0, 98.4, 80.0, 82.3], backgroundColor: '#27ae60' }
+                        { label: '有脫膠者綠線率 V-Line with Peeling %', data: [88.6, 78.2, 97.5, 91.7, 44.4], backgroundColor: '#e74c3c' },
+                        { label: '無脫膠者綠線率 V-Line without Peeling %', data: [94.0, 87.0, 98.4, 80.0, 82.3], backgroundColor: '#27ae60' }
                     ]
                 },
                 options: { responsive: true, maintainAspectRatio: false, scales: { y: { max: 100 } } }
@@ -422,7 +424,7 @@
             new Chart(document.getElementById('s21CaseChart'), {
                 type: 'doughnut',
                 data: {
-                    labels: ['有脫膠+綠線', '有脫膠+無綠線', '無脫膠+綠線', '無脫膠+無綠線'],
+                    labels: ['有脫膠+綠線 Peeling with V-line  ', '有脫膠+無綠線 Peeling without V-line', '無脫膠+綠線 V-line without Peeling', '無脫膠+無綠線 without V-line & Peeling'],
                     datasets: [{
                         data: [310, 8, 501, 8],
                         backgroundColor: ['rgba(229, 62, 62, 0.8)', 'rgba(252, 129, 129, 0.6)', 'rgba(72, 187, 120, 0.8)', 'rgba(154, 230, 180, 0.6)']
