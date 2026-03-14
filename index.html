@@ -98,7 +98,30 @@
             /* 綠色發光效果 */
             box-shadow: 0 6px 20px rgba(72, 187, 120, 0.5); 
         }
+        /* ✅ YouTube 按鈕專屬樣式 */
+.video-btn {
+    background-color: #fff0f0;
+    color: #e53e3e;
+    border: 1px solid #fc8181;
+    transition: all 0.3s ease;
+}
+.video-btn:hover {
+    background-color: #e53e3e;
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(229, 62, 62, 0.2);
+}
 
+/* ✅ RWD 響應式影片容器 */
+.video-section {
+    background: white;
+    border-radius: 20px;
+    padding: 30px;
+    margin: 30px 0;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+    text-align: center;
+}
+/* ...（包含其他影片容器的 CSS，見上一個回覆）... */
         .tab-content {
             display: none;
             animation: fadeIn 0.4s ease-out;
@@ -177,11 +200,11 @@
             <div class="date-range">統計期間：2024/09/03 ~ 2026/02/14</div>
         </div>
 
-        <div class="tabs-container">
-            <button class="tab-btn active" onclick="openTab(event, 'tab1')">📊 總覽與機型分佈</button>
-            <button class="tab-btn" onclick="openTab(event, 'tab2')">🔬 脫膠 vs 綠線 真相解析</button>
-        </div>
-
+   <div class="tabs-container" ...>
+    <button class="tab-btn active">📊 總覽與機型分佈</button>
+    <button class="tab-btn">🔬 脫膠 vs 綠線 真相解析</button>
+    <button class="tab-btn video-btn" onclick="scrollToVideo()">▶️ 觀看完整拆機解析</button>
+</div>
         <div id="tab1" class="tab-content" style="display: block;">
             
             <div class="stats-grid">
@@ -336,8 +359,27 @@
             </div>
 
         </div> </div>
-
+<div class="video-section" id="video-target">
+    <h2>🎬 真相實錄：Note8/9 拆機與背膠工藝秘辛</h2>
+    <p style="color: #718096; margin-bottom: 20px;">數據無法呈現的物理真相，讓我們打開背蓋一探究竟。</p>
+    
+    <div class="youtube-container">
+        <iframe 
+            src="https://www.youtube.com/embed/tLm7Jbgq00I" 
+            title="三星綠線門拆機解析" 
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+            allowfullscreen>
+        </iframe>
+    </div>
+</div>
     <script>
+        // ✅ 點擊頂部按鈕，平滑滾動到影片區塊
+function scrollToVideo() {
+    const videoSection = document.getElementById('video-target');
+    if (videoSection) {
+        videoSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+}
         // 🚀 頁籤切換與 Chart.js 重繪邏輯
         function openTab(evt, tabName) {
             let i, tabcontent, tablinks;
