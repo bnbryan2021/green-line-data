@@ -111,7 +111,26 @@
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(229, 62, 62, 0.2);
 }
-
+/* ✅ 影片容器的滿版響應式設定 */
+.youtube-container {
+    position: relative;
+    width: 100%;           /* 讓寬度撐滿版面 */
+    max-width: 1000px;     /* 最大寬度，跟你的數據卡片差不多寬 */
+    margin: 0 auto;        /* 讓影片置中 */
+    padding-bottom: 56.25%;/* 魔法數字：維持完美的 16:9 比例 */
+    height: 0;
+    overflow: hidden;
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+}
+.youtube-container iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+}
 /* ✅ RWD 響應式影片容器 */
 .video-section {
     background: white;
@@ -362,8 +381,8 @@
 
         </div> </div>
 <div class="video-section" id="video-target">
-    <h2>🎬 真相實錄：Note8/9 拆機與背膠工藝秘辛</h2>
-    <p style="color: #718096; margin-bottom: 20px;">數據無法呈現的物理真相，讓我們打開背蓋一探究竟。</p>
+    <h2>🎬 三星手機「綠線」與「背蓋脫膠」的驚人真相！ </h2>
+    <p style="color: #718096; margin-bottom: 20px;">2427份數據揭露大廠不敢說的秘密？</p>
     
     <div class="youtube-container">
         <iframe 
