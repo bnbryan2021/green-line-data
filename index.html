@@ -200,9 +200,11 @@
             <div class="date-range">統計期間：2024/09/03 ~ 2026/02/14</div>
         </div>
 
-   <div class="tabs-container" ...>
-    <button class="tab-btn active">📊 總覽與機型分佈</button>
-    <button class="tab-btn">🔬 脫膠 vs 綠線 真相解析</button>
+ <div class="tabs-container" style="display: flex; justify-content: center; gap: 10px; margin-bottom: 20px;">
+    <button class="tab-btn active" onclick="openTab(event, 'tab1')">📊 總覽與機型分佈</button>
+    
+    <button class="tab-btn" onclick="openTab(event, 'tab2')">🔬 脫膠 vs 綠線 真相解析</button>
+    
     <button class="tab-btn video-btn" onclick="scrollToVideo()">▶️ 觀看完整拆機解析</button>
 </div>
         <div id="tab1" class="tab-content" style="display: block;">
