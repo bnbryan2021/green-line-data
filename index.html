@@ -111,18 +111,18 @@
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(229, 62, 62, 0.2);
 }
-/* ✅ 影片容器的滿版響應式設定 */
+/* ✅ 影片容器：強制鎖定 16:9 橫向比例 */
 .youtube-container {
     position: relative;
-    width: 100%;           /* 讓寬度撐滿版面 */
-    max-width: 1000px;     /* 最大寬度，跟你的數據卡片差不多寬 */
-    margin: 0 auto;        /* 讓影片置中 */
-    padding-bottom: 56.25%;/* 魔法數字：維持完美的 16:9 比例 */
-    height: 0;
+    width: 100%;           
+    max-width: 1000px;     
+    margin: 0 auto;        
+    aspect-ratio: 16 / 9;  /* 🌟 關鍵魔法：直接鎖死橫式寬高比，絕對不會變直的 */
     overflow: hidden;
     border-radius: 16px;
     box-shadow: 0 10px 30px rgba(0,0,0,0.15);
 }
+
 .youtube-container iframe {
     position: absolute;
     top: 0;
