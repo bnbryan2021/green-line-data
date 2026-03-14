@@ -131,15 +131,29 @@
     height: 100%;
     border: none;
 }
-/* ✅ RWD 響應式影片容器 */
+/* ✅ 影片區塊：深色劇院模式 (替換原本的 .video-section 相關設定) */
 .video-section {
-    background: white;
+    background: #1a202c;  /* 🌟 關鍵：改成深色背景 */
     border-radius: 20px;
-    padding: 30px;
+    padding: 40px 30px;
     margin: 30px 0;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+    box-shadow: 0 15px 35px rgba(0,0,0,0.25); /* 稍微加深陰影增加立體感 */
     text-align: center;
 }
+
+.video-section h2 {
+    color: #ffffff;       /* 🌟 標題變成純白，在深色底上非常清晰 */
+    margin-bottom: 12px;
+    font-size: 1.8em;
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+.video-section p {
+    color: #a0aec0 !important; /* 🌟 說明文字變成柔和的淺灰色 (!important 會自動覆蓋你寫在 HTML 裡的顏色) */
+    margin-bottom: 30px;
+    font-size: 1.1em;
+}
+/* (原本下方的 .youtube-container 維持不變即可) */
 /* ...（包含其他影片容器的 CSS，見上一個回覆）... */
         .tab-content {
             display: none;
